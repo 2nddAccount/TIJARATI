@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>تجارتي - Tijarati</title>
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <link rel="apple-touch-icon" href="assets/icon.png">
+
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-gray-100 min-h-screen text-gray-800">
+    <div id="app" class="max-w-md mx-auto bg-gray-50 min-h-screen shadow-2xl relative overflow-hidden flex flex-col">
+
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="fixed inset-0 bg-teal-900 flex flex-col items-center justify-center z-50">
+            <div class="text-center text-white animate-slide-up">
+                <div
+                    class="w-20 h-20 bg-teal-800 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-xl border border-teal-700">
+                    <img src="assets/icon.png" class="w-12 h-12 object-contain filter brightness-0 invert">
+                </div>
+                <h1 class="text-3xl font-bold mb-1" data-i18n="appName">Tijarati</h1>
+                <p class="text-teal-300 text-sm tracking-widest uppercase" data-i18n="loading">جاري التحميل...</p>
+            </div>
+        </div>
+
+        <!-- ================= MAIN SCREENS CONTAINER ================= -->
+        <div id="main-container" class="flex-1 relative overflow-hidden flex flex-col">
+            <!-- Screens will be injected/controlled here -->
+            <!-- HOME SCREEN -->
+            <div id="home-screen" class="screen active flex-col h-full overflow-y-auto safe-bottom">
+                <!-- Header -->
+                <header class="bg-teal-900 text-white p-6 pb-12 rounded-b-[2.5rem] shadow-lg relative z-10">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <p class="text-teal-300 text-xs font-medium mb-1" id="current-date-header"></p>
+                            <h2 class="text-2xl font-bold" data-i18n="appName">تجارتي</h2>
+                        </div>
+                        <button onclick="Functions.showScreen('settings-screen')"
+                            class="w-10 h-10 bg-teal-800 rounded-full flex items-center justify-center hover:bg-teal-700 transition border border-teal-700">
+                            <i data-lucide="settings" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="text-teal-300 text-sm font-medium mb-1" data-i18n="netProfit">صافي الربح</p>
+                        <div class="flex items-baseline justify-center gap-1">
+                            <span id="dashboard-balance" class="text-4xl font-bold">0.00</span>
+                            <span class="text-lg text-teal-300 currency-symbol">DH</span>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Stats Cards -->
+                <div class="px-5 -mt-8 relative z-20 grid grid-cols-2 gap-4">
+                    <div class="pro-card p-4 flex flex-col justify-between h-24">
+                        <div class="flex items-start justify-between">
+                            <span class="text-gray-500 text-xs font-bold" data-i18n="income">المداخيل</span>
+                            <div
+                                class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+                                <i data-lucide="arrow-down-left" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <p class="text-lg font-bold text-emerald-600 truncate"><span id="dashboard-income">0</span>
+                            <span class="text-xs currency-symbol">DH</span>
+                        </p>
+                    </div>
+                    <div class="pro-card p-4 flex flex-col justify-between h-24">
+                        <div class="flex items-start justify-between">
+                            <span class="text-gray-500 text-xs font-bold" data-i18n="expenses">المصاريف</span>
+                            <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center text-red-600">
+                                <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                        <p class="text-lg font-bold text-red-600 truncate"><span id="dashboard-expense">0</span> <span
+                                class="text-xs currency-symbol">DH</span></p>
+                    </div>
+                </div>
+
+                <!-- Action Section -->
+                <div class="p-5 mt-2">
+                    <h3 class="text-gray-800 font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="zap" class="w-5 h-5 text-amber-500"></i>
+                        <span data-i18n="quickActions">عمليات سريعة</span>
+                    </h3>
+
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <button onclick="Functions.startFlow('sale')"
+                            class="pro-card p-4 bg-gradient-to-br from-emerald-500 to-teal-600 text-white border-none shadow-lg active:scale-95 transition-transform">
+                            <div class="flex flex-col items-center py-2">
+                                <i data-lucide="shopping-cart" class="w-8 h-8 mb-2"></i>
+                                <span class="font-bold text-lg" data-i18n="newSale">بيع جديد</span>
+                            </div>
+                        </button>
+                        <button onclick="Functions.startFlow('purchase')"
+                            class="pro-card p-4 bg-white text-gray-700 active:scale-95 transition-transform hover:bg-gray-50">
+                            <div class="flex flex-col items-center py-2">
+                                <i data-lucide="package-plus" class="w-8 h-8 mb-2 text-orange-500"></i>
+                                <span class="font-bold text-lg" data-i18n="newPurchase">شراء سلعة</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div id="debt-alert"
+                        class="hidden pro-card p-4 bg-orange-50 border-orange-100 mb-6 flex items-center justify-between"
+                        onclick="Functions.showScreen('debts-screen')">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600">
+                                <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-800" data-i18n="pendingDebts">ديون معلقة</p>
+                                <p class="text-xs text-orange-600 font-semibold"><span id="total-pending-debt">0</span>
+                                    <span class="currency-symbol">DH</span>
+                                </p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-left" class="w-5 h-5 text-gray-400 rtl:rotate-180"></i>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-gray-800 font-bold" data-i18n="recentActivity">آخر العمليات</h3>
+                        <button onclick="Functions.showScreen('history-screen')"
+                            class="text-teal-600 text-sm font-semibold hover:underline" data-i18n="seeAll">شوف
+                            الكل</button>
+                    </div>
+                    <div id="recent-transactions-list" class="space-y-3 pb-4"></div>
+                </div>
+            </div>
+
+            <!-- HISTORY SCREEN -->
+            <div id="history-screen" class="screen flex-col h-full bg-gray-50 overflow-hidden">
+                <header class="bg-white p-4 shadow-sm z-10 sticky top-0">
+                    <h1 class="text-xl font-bold text-center" data-i18n="transactions">السجل</h1>
+                    <div class="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-hide">
+                        <button onclick="Functions.filterHistory('all')"
+                            class="filter-chip active px-4 py-2 bg-teal-600 text-white rounded-full text-sm font-medium whitespace-nowrap"
+                            data-filter="all" data-i18n="all">الكل</button>
+                        <button onclick="Functions.filterHistory('sale')"
+                            class="filter-chip px-4 py-2 bg-gray-200 text-gray-600 rounded-full text-sm font-medium whitespace-nowrap"
+                            data-filter="sale" data-i18n="sales">مبيعات</button>
+                        <button onclick="Functions.filterHistory('purchase')"
+                            class="filter-chip px-4 py-2 bg-gray-200 text-gray-600 rounded-full text-sm font-medium whitespace-nowrap"
+                            data-filter="purchase" data-i18n="purchases">مشتريات</button>
+                        <button onclick="Functions.filterHistory('debt')"
+                            class="filter-chip px-4 py-2 bg-gray-200 text-gray-600 rounded-full text-sm font-medium whitespace-nowrap"
+                            data-filter="debt" data-i18n="credits">كريدي</button>
+                    </div>
+                </header>
+                <div id="full-history-list" class="flex-1 overflow-y-auto p-4 space-y-3 safe-bottom"></div>
+            </div>
+
+            <!-- DEBTS SCREEN -->
+            <div id="debts-screen" class="screen flex-col h-full bg-gray-50 overflow-hidden">
+                <header class="bg-gradient-to-r from-orange-500 to-amber-500 text-white p-6 pb-8 shadow-lg">
+                    <h1 class="text-2xl font-bold mb-2" data-i18n="creditBook">دفتر الكريدي</h1>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <p class="text-orange-100 text-sm" data-i18n="peopleOweYou">ناس كيتسالوك</p>
+                            <p class="text-3xl font-bold"><span id="debts-total">0</span> <span
+                                    class="text-lg currency-symbol">DH</span></p>
+                        </div>
+                        <div class="bg-white/20 p-2 rounded-lg"><i data-lucide="book-open"
+                                class="w-6 h-6 text-white"></i></div>
+                    </div>
+                </header>
+                <div class="flex-1 overflow-y-auto p-4 -mt-4 rounded-t-3xl bg-gray-50 z-10 safe-bottom">
+                    <div id="debts-list" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- PARTNERS SCREEN -->
+            <div id="partners-screen" class="screen flex-col h-full bg-gray-50 overflow-hidden">
+                <header class="bg-white p-4 shadow-sm z-10">
+                    <div class="flex bg-gray-100 p-1 rounded-xl">
+                        <button onclick="Functions.switchPartnerTab('stock')" id="tab-stock"
+                            class="flex-1 py-2 rounded-lg bg-white shadow-sm font-bold text-teal-700 text-sm transition-all"
+                            data-i18n="stock">السلعة (Stock)</button>
+                        <button onclick="Functions.switchPartnerTab('partners')" id="tab-partners"
+                            class="flex-1 py-2 rounded-lg text-gray-500 font-bold text-sm transition-all"
+                            data-i18n="partners">الشركاء</button>
+                    </div>
+                </header>
+                <div id="stock-view" class="flex-1 overflow-y-auto p-4 space-y-3 safe-bottom"></div>
+                <div id="partners-view" class="hidden flex-1 overflow-y-auto p-4 space-y-4 safe-bottom">
+                    <div class="pro-card p-4">
+                        <h3 class="font-bold text-gray-700 mb-3" data-i18n="addPartner">إضافة شريك</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="partner-name"
+                                class="flex-1 bg-gray-50 border border-gray-200 rounded-xl p-3 text-sm focus:border-teal-500"
+                                placeholder="الاسم...">
+                            <input type="number" id="partner-percent"
+                                class="w-20 bg-gray-50 border border-gray-200 rounded-xl p-3 text-center text-sm focus:border-teal-500"
+                                placeholder="%">
+                            <button onclick="Functions.addPartner()"
+                                class="bg-teal-600 text-white p-3 rounded-xl hover:bg-teal-700"><i data-lucide="plus"
+                                    class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+                    <div id="partners-list" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- SETTINGS SCREEN -->
+            <div id="settings-screen" class="screen flex-col h-full bg-white dark:bg-gray-900 z-50 absolute inset-0">
+                <header class="p-4 flex items-center gap-3">
+                    <button onclick="Functions.goBack()"
+                        class="p-2 hover:bg-gray-100 rounded-full dark:hover:bg-gray-800 transition-colors"><i
+                            data-lucide="arrow-right"
+                            class="w-6 h-6 text-gray-800 dark:text-white rtl:rotate-180"></i></button>
+                    <h1 class="text-xl font-bold dark:text-white" data-i18n="settings">الإعدادات</h1>
+                </header>
+                <div class="p-4 space-y-6 overflow-y-auto safe-bottom">
+
+                    <!-- Appearance Section -->
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider px-2">المظهر</h3>
+                        <div class="pro-card p-0 overflow-hidden">
+                            <div
+                                class="flex justify-between items-center p-4 border-b border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center dark:bg-indigo-900/50 dark:text-indigo-300">
+                                        <i data-lucide="moon" class="w-4 h-4"></i>
+                                    </div>
+                                    <span class="font-bold text-gray-800 text-sm dark:text-gray-100"
+                                        data-i18n="darkMode">الوضع المظلم</span>
+                                </div>
+                                <button onclick="Functions.toggleTheme()"
+                                    class="w-11 h-6 bg-gray-300 rounded-full relative transition-colors dark:bg-teal-600">
+                                    <div
+                                        class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform dark:translate-x-5 shadow-sm">
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personalization Section -->
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider px-2">التخصيص</h3>
+                        <div class="pro-card p-4 space-y-4">
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-700 mb-3 dark:text-gray-300"
+                                    data-i18n="language">اللغة</h4>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="Functions.setLanguage('darija')"
+                                        class="lang-btn p-3 border rounded-xl flex items-center justify-center gap-2 font-bold text-xs bg-gray-50 hover:bg-teal-50 hover:border-teal-200 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                                        data-lang="darija">🇲🇦 الدارجة</button>
+                                    <button onclick="Functions.setLanguage('arabic')"
+                                        class="lang-btn p-3 border rounded-xl flex items-center justify-center gap-2 font-bold text-xs bg-gray-50 hover:bg-teal-50 hover:border-teal-200 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                                        data-lang="arabic">🌙 العربية</button>
+                                    <button onclick="Functions.setLanguage('french')"
+                                        class="lang-btn p-3 border rounded-xl flex items-center justify-center gap-2 font-bold text-xs bg-gray-50 hover:bg-teal-50 hover:border-teal-200 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                                        data-lang="french">🇫🇷 Français</button>
+                                    <button onclick="Functions.setLanguage('english')"
+                                        class="lang-btn p-3 border rounded-xl flex items-center justify-center gap-2 font-bold text-xs bg-gray-50 hover:bg-teal-50 hover:border-teal-200 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                                        data-lang="english">🇬🇧 English</button>
+                                </div>
+                            </div>
+                            <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
+                                <h4 class="text-sm font-bold text-gray-700 mb-3 dark:text-gray-300"
+                                    data-i18n="currency">العملة</h4>
+                                <div class="flex gap-2">
+                                    <button onclick="Functions.setCurrency('MAD')"
+                                        class="curr-btn flex-1 p-2 border rounded-xl font-bold text-sm bg-gray-50 hover:bg-teal-50 hover:border-teal-200 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                                        data-curr="MAD">MAD</button>
+                                    <button onclick="Functions.setCurrency('USD')"
+                                        class="curr-btn flex-1 p-2 border rounded-xl font-bold text-sm bg-gray-50 hover:bg-teal-50 hover:border-teal-200 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                                        data-curr="USD">USD</button>
+                                    <button onclick="Functions.setCurrency('EUR')"
+                                        class="curr-btn flex-1 p-2 border rounded-xl font-bold text-sm bg-gray-50 hover:bg-teal-50 hover:border-teal-200 transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200"
+                                        data-curr="EUR">EUR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- App Info -->
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider px-2">حول التطبيق</h3>
+                        <div class="pro-card p-0 overflow-hidden">
+                            <div class="p-4 flex items-center gap-4">
+                                <img src="assets/icon.png" class="w-12 h-12 rounded-xl bg-teal-50 p-1">
+                                <div>
+                                    <h4 class="font-bold text-gray-800 dark:text-gray-100">Tijarati Mobile</h4>
+                                    <p class="text-xs text-gray-500">Version 2.2.0 • Build 14</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-gray-50 p-4 border-t border-gray-100 text-center dark:bg-gray-800 dark:border-gray-700">
+                                <p class="text-xs text-gray-400">Made with ❤️ by Oussama</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVBAR -->
+        <nav class="bg-white border-t border-gray-200 px-6 py-3 flex justify-between items-center z-40 nav-safe-bottom">
+            <button onclick="Functions.showScreen('home-screen')"
+                class="nav-item active flex flex-col items-center gap-1 text-teal-600 transition-colors"
+                data-target="home-screen">
+                <i data-lucide="home" class="w-6 h-6"></i>
+                <span class="text-[10px] font-bold" data-i18n="home">الرئيسية</span>
+            </button>
+            <button onclick="Functions.showScreen('history-screen')"
+                class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-teal-600 transition-colors"
+                data-target="history-screen">
+                <i data-lucide="list" class="w-6 h-6"></i>
+                <span class="text-[10px] font-bold" data-i18n="history">السجل</span>
+            </button>
+            <div class="relative -top-8">
+                <button onclick="Functions.startFlow('sale')"
+                    class="fab w-14 h-14 bg-teal-600 rounded-full flex items-center justify-center text-white shadow-lg border-4 border-gray-50 transform transition active:scale-95">
+                    <i data-lucide="plus" class="w-8 h-8"></i>
+                </button>
+            </div>
+            <button onclick="Functions.showScreen('debts-screen')"
+                class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-teal-600 transition-colors"
+                data-target="debts-screen">
+                <i data-lucide="book-open" class="w-6 h-6"></i>
+                <span class="text-[10px] font-bold" data-i18n="credit">الكريدي</span>
+            </button>
+            <button onclick="Functions.showScreen('partners-screen')"
+                class="nav-item flex flex-col items-center gap-1 text-gray-400 hover:text-teal-600 transition-colors"
+                data-target="partners-screen">
+                <i data-lucide="users" class="w-6 h-6"></i>
+                <span class="text-[10px] font-bold" data-i18n="partners">الشركاء</span>
+            </button>
+        </nav>
+
+        <!-- TRANSACTION MODAL -->
+        <div id="transaction-modal"
+            class="fixed inset-0 bg-black/60 hidden z-50 flex-col justify-end sm:justify-center p-0 sm:p-4 backdrop-blur-sm">
+            <div
+                class="bg-white w-full max-w-md mx-auto rounded-t-3xl sm:rounded-3xl overflow-hidden flex flex-col max-h-[90vh] animate-slide-up">
+                <div id="modal-header" class="p-4 text-white flex justify-between items-center bg-teal-600">
+                    <h2 id="modal-title" class="text-lg font-bold">تسجيل عملية</h2>
+                    <button onclick="Functions.closeModal()" class="p-2 hover:bg-white/20 rounded-full text-white"><i
+                            data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-5 space-y-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="itemName">اسم
+                            السلعة</label>
+                        <input type="text" id="tx-item"
+                            class="w-full p-4 bg-gray-50 border-2 border-gray-200 rounded-xl text-lg focus:border-teal-500"
+                            placeholder="...">
+                        <div class="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide" id="quick-suggestions"></div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-1">
+                            <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="price">الثمن</label>
+                            <div class="relative">
+                                <input type="number" id="tx-price"
+                                    class="w-full p-4 bg-gray-50 border-2 border-gray-200 rounded-xl text-xl font-bold focus:border-teal-500"
+                                    placeholder="0">
+                                <span
+                                    class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold currency-symbol">DH</span>
+                            </div>
+                        </div>
+                        <div class="w-1/3">
+                            <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="quantity">العدد</label>
+                            <input type="number" id="tx-qty" value="1"
+                                class="w-full p-4 bg-gray-50 border-2 border-gray-200 rounded-xl text-xl font-bold text-center focus:border-teal-500">
+                        </div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-gray-700" data-i18n="paymentStatus">حالة الخلاص</span>
+                            <div class="flex bg-white rounded-lg p-1 border border-gray-200">
+                                <button onclick="Functions.setPaymentType('paid')" id="btn-paid"
+                                    class="px-3 py-1 rounded text-sm font-bold bg-teal-100 text-teal-700">خالص</button>
+                                <button onclick="Functions.setPaymentType('credit')" id="btn-credit"
+                                    class="px-3 py-1 rounded text-sm font-bold text-gray-500">كريدي</button>
+                            </div>
+                        </div>
+                        <div id="credit-details" class="hidden animate-slide-up space-y-3">
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 mb-1 block" data-i18n="clientName">سمية
+                                    الشخص</label>
+                                <input type="text" id="tx-client"
+                                    class="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                                    placeholder="فلان بن فلان...">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 mb-1 block" data-i18n="amountPaid">شحال
+                                    عطى (العربون)</label>
+                                <input type="number" id="tx-paid-amount"
+                                    class="w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2" data-i18n="date">التاريخ</label>
+                        <input type="date" id="tx-date" class="w-full p-3 bg-white border border-gray-200 rounded-xl">
+                    </div>
+                </div>
+                <div class="p-4 border-t border-gray-100 bg-gray-50 safe-bottom">
+                    <button onclick="Functions.saveTransaction()" id="save-btn"
+                        class="w-full p-4 bg-teal-600 text-white rounded-xl font-bold text-lg shadow-lg hover:bg-teal-700 flex justify-center items-center gap-2">
+                        <i data-lucide="check" class="w-6 h-6"></i>
+                        <span data-i18n="save">حفظ العملية</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTIFICATION TOAST -->
+        <div id="toast"
+            class="fixed top-5 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 transition-all duration-300 transform -translate-y-20 opacity-0 z-[70]">
+            <div id="toast-icon" class="text-emerald-400"><i data-lucide="check-circle" class="w-5 h-5"></i></div>
+            <p id="toast-message" class="font-bold text-sm">تمت العملية بنجاح</p>
+        </div>
+
+    </div>
+
+    <!-- Logic - Load Order Important -->
+    <script src="js/utils.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

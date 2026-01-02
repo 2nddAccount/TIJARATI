@@ -1,0 +1,48 @@
+# Dependencies
+**/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+**/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.*
+**/*.pem
+**/*.p12
+**/*.key
+**/*.jks
+
+# Expo / React Native
+**/.expo/
+**/.expo-shared/
+**/dist/
+**/web-build/
+
+# Android / Gradle build outputs
+**/.gradle/
+**/build/
+mobile/android/app/build/
+mobile/android/build/
+mobile/android/.idea/
+mobile/android/local.properties
+
+# iOS (if generated later)
+**/ios/
+
+# Editor
+.vscode/settings.json
+
+# Runtime data
+*.sqlite
+*.db
+
+# Temporary
+*.tmp
+*.bak
