@@ -6,6 +6,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 **/logs/
+server/*.log
 
 # OS
 .DS_Store
@@ -18,6 +19,12 @@ Thumbs.db
 **/*.p12
 **/*.key
 **/*.jks
+
+# Firebase / Google services config
+/google-services.json
+!mobile/android/app/google-services.json
+!mobile/google-services.json
+GoogleService-Info.plist
 
 # Expo / React Native
 **/.expo/

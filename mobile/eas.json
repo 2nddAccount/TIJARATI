@@ -5,11 +5,17 @@
   "build": {
     "preview": {
       "distribution": "internal",
+      "env": {
+        "TIJARATI_AI_SERVER_URL": ""
+      },
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
+      "env": {
+        "TIJARATI_AI_SERVER_URL": ""
+      },
       "android": {
         "buildType": "app-bundle"
       }

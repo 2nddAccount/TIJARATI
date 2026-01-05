@@ -4,11 +4,12 @@ Tijarati is a small bookkeeping app (sales, purchases, debts/credit book, remind
 
 ## Repo layout
 
-- `index.html` — **source of the in-app Web UI** (state, i18n, UI, logic).
+- `index.html` — **canonical Web UI** (used by mobile bundle and by the Node web server).
 - `bundler.js` — bundles `index.html` into the mobile asset.
 - `mobile/` — Expo React Native wrapper app (SQLite persistence, notifications, file/share bridge).
-- `public/` — older web assets (not the current in-app UI source).
-- `server/` and `backend/` — Node.js server folders (used for non-mobile deployments / experiments).
+- `public/` — (removed) legacy web UI.
+- `server/` — Node.js server (serves the canonical UI at `/`).
+- `backend/` — older server prototype (not used by the canonical UI).
 
 ## Development
 
@@ -22,6 +23,16 @@ From repo root:
 node bundler.js
 ```
 
+### 1b) Run the web server (canonical UI)
+
+```bash
+cd server
+npm install
+node server.js
+```
+
+If the AI status shows "AI endpoint missing", you are likely running the legacy server in `backend/`. Use the `server/` command above (it serves `/api/ai/status` and `/api/ai`).
+
 ### 2) Run the mobile app (Expo)
 
 ```bash
@@ -30,9 +41,49 @@ npm install
 npx expo start
 ```
 
+## AI in Mobile builds (no local server)
+
+The mobile app bundles the UI inside a WebView (`file://`). To use real AI (Gemini) **without running a local server**, you must provide a hosted backend URL.
+
+- Deploy the Node server in `server/` to a public URL (Render/Fly/Cloud Run/etc).
+- Set `TIJARATI_AI_SERVER_URL` for EAS builds (Preview + Production) to that URL.
+
+Example:
+
+- `TIJARATI_AI_SERVER_URL=https://your-tijarati-server.example.com`
+
+The app will automatically call:
+
+- `${TIJARATI_AI_SERVER_URL}/api/ai/status`
+- `${TIJARATI_AI_SERVER_URL}/api/ai`
+
+If the URL is not set or is unreachable, the app falls back to the built-in local assistant.
+
 Notes:
+
 - Debt reminders and “Download/Share” are handled through the native bridge in `mobile/App.js`.
 - SQLite database file is stored on-device (`tijarati.db`).
+
+## Firebase / Cloud backup
+
+The canonical UI (`index.html`) includes Firebase Auth + Storage for cloud backup/restore.
+
+### Web config (required)
+
+For Firebase Auth/Storage to work reliably, create a **Web App** in Firebase Console and copy the config snippet.
+
+- Update the `FIREBASE_CONFIG` object inside `index.html` with the exact values Firebase gives you (especially `apiKey`, `authDomain`, and `appId`).
+
+### Android config (package name must match)
+
+Firebase Android builds require the package name in `mobile/android/app/build.gradle` to match the one inside `mobile/android/app/google-services.json`.
+
+Right now the Android app is configured as `com.tijarati`, but the downloaded `google-services.json` targets `com.H_Oussama.tijarati`.
+
+Fix options:
+
+- Recommended: in Firebase Console, create/add an Android app with package **`com.tijarati`**, then download a new `google-services.json` and replace `mobile/android/app/google-services.json`.
+- Alternative: change the Android app package (Expo `mobile/app.json` + native Android sources) to match `com.H_Oussama.tijarati`.
 
 ## Scripts
 

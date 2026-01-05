@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "796219379032",
+    "project_id": "tijarati-ec23b",
+    "storage_bucket": "tijarati-ec23b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796219379032:android:1b8e0a0aaf286aab8ba92d",
+        "android_client_info": {
+          "package_name": "com.tijarati"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796219379032-illup0l4nl6r7qu1l6ggqsmq0odit27l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tijarati",
+            "certificate_hash": "b47759613441a7401e7381f7a2ce0e6494dbb242"
+          }
+        },
+        {
+          "client_id": "796219379032-to20l2jbsnk2k4armola7j71b82k6met.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXkU7WA5g2RJjBHN07V_TbNDmcL98LFjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796219379032-to20l2jbsnk2k4armola7j71b82k6met.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

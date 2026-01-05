@@ -24,6 +24,7 @@
         "backgroundColor": "#0F766E"
       },
       "package": "com.tijarati",
+      "googleServicesFile": "./google-services.json",
       "softwareKeyboardLayoutMode": "pan",
       "permissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -43,7 +44,8 @@
           "savePhotosPermission": "Allow Tijarati to save backup files to your device.",
           "isAccessMediaLocationEnabled": true
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "web": {
       "favicon": "./assets/favicon.png"
